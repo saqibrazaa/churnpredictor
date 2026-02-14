@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telco Churn AI Dashboard</title>
+    <link rel="stylesheet" href="static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">ChurnAI</span>
+            </div>
+            <nav>
+                <a href="#overview" class="nav-item active">Overview</a>
+                <a href="#insights" class="nav-item">Insights</a>
+                <a href="#predict" class="nav-item">Predictor</a>
+                <a href="#interpret" class="nav-item">Explainability</a>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header>
+                <h1>Telco Customer Churn Dashboard</h1>
+                <p>Advanced predictive analytics for customer retention.</p>
+            </header>
+
+            <section id="overview" class="dashboard-grid">
+                <div class="card stat-card">
+                    <h3>Model Accuracy</h3>
+                    <div class="stat-value">75%</div>
+                    <p>XGBoost Classifier</p>
+                </div>
+                <div class="card stat-card">
+                    <h3>F1-Score</h3>
+                    <div class="stat-value">0.59</div>
+                    <p>Balanced Performance</p>
+                </div>
+                <div class="card stat-card">
+                    <h3>Top Driver</h3>
+                    <div class="stat-value">Charges</div>
+                    <p>Monthly Charges</p>
+                </div>
+            </section>
+
+            <section id="insights">
+                <h2 class="section-title">Exploratory Insights</h2>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="/plots/churn_distribution.png" alt="Churn Distribution">
+                        <div class="gallery-overlay">Churn distribution</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="/plots/tenure_churn.png" alt="Tenure vs Churn">
+                        <div class="gallery-overlay">Tenure impact</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="/plots/monthly_charges_churn.png" alt="Monthly Charges vs Churn">
+                        <div class="gallery-overlay">Price sensitivity</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="/plots/contract_churn.png" alt="Contract vs Churn">
+                        <div class="gallery-overlay">Contract type impact</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="predict">
+                <h2 class="section-title">Customer Churn Predictor</h2>
+                <div class="card glass">
+                    <form id="predictionForm" class="predict-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <select name="gender">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Senior Citizen</label>
+                                <select name="SeniorCitizen">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Tenure (Months)</label>
+                                <input type="number" name="tenure" value="12" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Contract</label>
+                                <select name="Contract">
+                                    <option value="Month-to-month">Month-to-month</option>
+                                    <option value="One year">One year</option>
+                                    <option value="Two year">Two year</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Internet Service</label>
+                                <select name="InternetService">
+                                    <option value="Fiber optic">Fiber optic</option>
+                                    <option value="DSL">DSL</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Monthly Charges ($)</label>
+                                <input type="number" name="MonthlyCharges" value="70.0" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Total Charges ($)</label>
+                                <input type="number" name="TotalCharges" value="840.0" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Payment Method</label>
+                                <select name="PaymentMethod">
+                                    <option value="Electronic check">Electronic check</option>
+                                    <option value="Mailed check">Mailed check</option>
+                                    <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+                                    <option value="Credit card (automatic)">Credit card (automatic)</option>
+                                </select>
+                            </div>
+                            <!-- Helper hidden inputs for default values -->
+                            <input type="hidden" name="Partner" value="No">
+                            <input type="hidden" name="Dependents" value="No">
+                            <input type="hidden" name="PhoneService" value="Yes">
+                            <input type="hidden" name="MultipleLines" value="No">
+                            <input type="hidden" name="OnlineSecurity" value="No">
+                            <input type="hidden" name="OnlineBackup" value="No">
+                            <input type="hidden" name="DeviceProtection" value="No">
+                            <input type="hidden" name="TechSupport" value="No">
+                            <input type="hidden" name="StreamingTV" value="No">
+                            <input type="hidden" name="StreamingMovies" value="No">
+                            <input type="hidden" name="PaperlessBilling" value="Yes">
+                        </div>
+                        <button type="submit" class="btn-predict">Analyze Risk</button>
+                    </form>
+                    <div id="resultContainer" class="result-container hidden">
+                        <div class="result-card">
+                            <h3>Prediction Result</h3>
+                            <div id="churnResult" class="churn-status">LOW RISK</div>
+                            <div class="prob-bar-container">
+                                <div id="probBar" class="prob-bar"></div>
+                            </div>
+                            <p id="probText">Churn Probability: 0%</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="interpret">
+                <h2 class="section-title">Model Explainability (SHAP)</h2>
+                <div class="gallery">
+                    <div class="gallery-item large">
+                        <img src="/plots/shap_summary_plot.png" alt="SHAP Summary">
+                        <div class="gallery-overlay">Visualizing global feature impact</div>
+                    </div>
+                    <div class="gallery-item large">
+                        <img src="/plots/shap_bar_plot.png" alt="SHAP Bar Plot">
+                        <div class="gallery-overlay">Global feature importance</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+</html>

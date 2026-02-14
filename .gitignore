@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Data and Models (Optional: include if you want them in the repo)
+# churn.csv
+# *.joblib
+
+# OS
+.DS_Store
+Thumbs.db
